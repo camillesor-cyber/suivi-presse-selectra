@@ -1,0 +1,26 @@
+name: Mise à jour mentions presse
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-mentions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Récupération RSS et mise à jour mentions.json
+        run: python update_mentions.py
+
+      - name: Commit et push si nouvelles mentions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add mentions.json
+          git diff --staged --quiet || git commit -m "Mentions presse — $(date +'%d/%m/%Y')"
+          git push
