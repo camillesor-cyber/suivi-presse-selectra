@@ -1,9 +1,3 @@
-"""
-Met à jour mentions.json avec les nouveaux articles Google News RSS.
-Tourne via GitHub Actions chaque matin a 8h.
-Aucune dependance externe, aucune cle API.
-"""
-
 import json
 import urllib.request
 import urllib.parse
@@ -12,13 +6,12 @@ from datetime import datetime
 from pathlib import Path
 
 BRAND        = "Selectra"
-MAX_ARTICLES = 20
+MAX_ARTICLES = 30
 JSON_FILE    = Path("mentions.json")
-EXCLUDE_DOMAINS = ["selectra.info", "selectra.net", "myselectra.com"]
+EXCLUDE_DOMAINS = ["selectra.info", "selectra.net", "myselectra.com", "selectra.com"]
 
 def fetch_rss():
-    exclusions = " ".join(f"-site:{d}" for d in EXCLUDE_DOMAINS)
-    query = urllib.parse.quote(f'"{BRAND}" {exclusions}')
+    query = urllib.parse.quote(f'"{BRAND}"')
     url   = f"https://news.google.com/rss/search?q={query}&hl=fr&gl=FR&ceid=FR:fr"
     req   = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=15) as resp:
@@ -30,6 +23,15 @@ def fetch_rss():
         link   = item.findtext("link",    "").strip()
         pub    = item.findtext("pubDate", "").strip()
         source = item.findtext("source",  "Source inconnue").strip()
+
+        # Filtrer les domaines Selectra
+        skip = False
+        for domain in EXCLUDE_DOMAINS:
+            if domain in link.lower() or domain in source.lower():
+                skip = True
+                break
+        if skip:
+            continue
 
         try:
             dt       = datetime.strptime(pub, "%a, %d %b %Y %H:%M:%S %Z")
@@ -72,7 +74,7 @@ def main():
 
     existing = sorted(existing, key=sort_key, reverse=True)[:500]
     JSON_FILE.write_text(json.dumps(existing, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"OK - {added} nouvelle(s) mention(s) ajoutee(s) sur {len(new_articles)} articles RSS")
+    print(f"OK - {added} ajoutee(s), {len(new_articles)} articles recuperes")
 
 if __name__ == "__main__":
     main()
