@@ -14,10 +14,13 @@ from pathlib import Path
 BRAND        = "Selectra"
 MAX_ARTICLES = 20
 JSON_FILE    = Path("mentions.json")
+EXCLUDE_DOMAINS = ["selectra.info", "selectra.net", "myselectra.com"]
 
 def fetch_rss():
-    query = urllib.parse.quote(f'"{BRAND}"')
-url   = f"https://news.google.com/rss/search?q={query}+-site:selectra.info&hl=fr&gl=FR&ceid=FR:fr"    req   = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    exclusions = " ".join(f"-site:{d}" for d in EXCLUDE_DOMAINS)
+    query = urllib.parse.quote(f'"{BRAND}" {exclusions}')
+    url   = f"https://news.google.com/rss/search?q={query}&hl=fr&gl=FR&ceid=FR:fr"
+    req   = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=15) as resp:
         root = ET.fromstring(resp.read())
 
