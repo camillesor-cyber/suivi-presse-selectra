@@ -17,8 +17,7 @@ JSON_FILE    = Path("mentions.json")
 
 def fetch_rss():
     query = urllib.parse.quote(f'"{BRAND}"')
-    url   = f"https://news.google.com/rss/search?q={query}&hl=fr&gl=FR&ceid=FR:fr"
-    req   = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+url   = f"https://news.google.com/rss/search?q={query}+-site:selectra.info&hl=fr&gl=FR&ceid=FR:fr"    req   = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(req, timeout=15) as resp:
         root = ET.fromstring(resp.read())
 
