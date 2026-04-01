@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Selectra — Suivi Presse</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --bg:      #f5f4f0;
@@ -26,100 +27,55 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; }
 
-  /* HEADER */
   header {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 20px 40px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 50;
   }
   .logo { display: flex; flex-direction: column; gap: 1px; }
-  .logo-name { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); letter-spacing: 0.01em; }
+  .logo-name { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--accent); }
   .logo-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
   .header-stats { display: flex; gap: 36px; }
   .stat { text-align: center; }
   .stat-val { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--text); line-height: 1; }
   .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-  /* TOOLBAR */
   .toolbar {
-    background: var(--bg2);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 40px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 12px 40px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
   }
   .filter-group { display: flex; gap: 4px; }
   .filter-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 5px 13px;
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.12s;
-    white-space: nowrap;
+    background: transparent; border: 1px solid var(--border); color: var(--muted);
+    padding: 5px 13px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.12s; white-space: nowrap;
   }
   .filter-btn:hover { border-color: var(--border2); color: var(--text); }
   .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
   .sep { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
   .search-wrap { flex: 1; min-width: 180px; position: relative; }
   .search-wrap input {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 7px 12px 7px 32px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    transition: border 0.12s;
+    width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 7px 12px 7px 32px; border-radius: 6px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.12s;
   }
   .search-wrap input:focus { border-color: var(--accent); background: var(--bg2); }
   .search-wrap input::placeholder { color: var(--muted); }
   .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
-  .btn-add {
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    padding: 7px 16px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.12s;
-    white-space: nowrap;
-  }
-  .btn-add:hover { background: var(--accent2); }
 
-  /* TABLE */
+  .btn { padding: 7px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.12s; white-space: nowrap; border: none; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary { background: var(--bg3); border: 1px solid var(--border); color: var(--text); }
+  .btn-secondary:hover { background: var(--border); }
+
   .table-wrap { padding: 20px 40px; }
   .count-label { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
   table { width: 100%; border-collapse: collapse; background: var(--bg2); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
   thead th {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.09em;
-    font-weight: 500;
-    padding: 10px 14px;
-    text-align: left;
-    background: var(--bg3);
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    user-select: none;
-    white-space: nowrap;
+    font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em;
+    font-weight: 500; padding: 10px 14px; text-align: left; background: var(--bg3);
+    border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap;
   }
   thead th:hover { color: var(--text); }
   thead th.sort-asc::after  { content: ' ↑'; color: var(--accent); }
@@ -136,11 +92,7 @@
   .td-source { color: var(--muted); font-size: 13px; white-space: nowrap; }
   .td-date { color: var(--muted); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
-  .badge {
-    display: inline-flex; align-items: center;
-    font-size: 11px; padding: 2px 8px; border-radius: 10px;
-    font-weight: 500; white-space: nowrap; border: 1px solid transparent;
-  }
+  .badge { display: inline-flex; align-items: center; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 500; white-space: nowrap; border: 1px solid transparent; }
   .badge-presse { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
   .badge-radio  { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
   .badge-tv     { background: #fdf4ff; color: #7e22ce; border-color: #e9d5ff; }
@@ -157,69 +109,53 @@
   .neutre  .tone-dot { background: var(--neu); }
   .negatif .tone-dot { background: var(--neg); }
 
-  .score-cell { display: flex; align-items: center; gap: 7px; }
-  .score-bar-wrap { width: 44px; height: 3px; background: var(--bg3); border-radius: 2px; }
-  .score-bar-fill { height: 100%; border-radius: 2px; background: var(--accent); opacity: 0.6; }
-  .score-num { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 14px; }
+  .score-pts { font-size: 13px; font-weight: 500; color: var(--accent); font-variant-numeric: tabular-nums; }
 
   .tag-auto   { font-size: 10px; color: var(--muted); background: var(--bg3); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border); }
   .tag-manuel { font-size: 10px; color: var(--accent); background: #eff6ff; padding: 2px 6px; border-radius: 3px; border: 1px solid #bfdbfe; }
+  .tag-import { font-size: 10px; color: #166534; background: #dcfce7; padding: 2px 6px; border-radius: 3px; border: 1px solid #bbf7d0; }
 
   .btn-delete { background: none; border: none; color: var(--border2); cursor: pointer; font-size: 16px; padding: 3px 6px; border-radius: 4px; transition: color 0.12s; line-height: 1; }
   .btn-delete:hover { color: var(--neg); }
 
   .empty { text-align: center; padding: 60px 0; color: var(--muted); background: var(--bg2); border-radius: 10px; border: 1px solid var(--border); }
   .empty-icon { font-size: 28px; margin-bottom: 10px; opacity: 0.4; }
-  .empty-text { font-size: 13px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: var(--bg2); padding: 10px 18px; border-radius: 8px; font-size: 13px; z-index: 200; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
 
   /* MODAL */
   .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; display: none; align-items: center; justify-content: center; }
   .overlay.open { display: flex; }
-  .modal {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    width: 520px;
-    max-width: calc(100vw - 32px);
-    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-  }
+  .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; width: 520px; max-width: calc(100vw - 32px); box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
   .modal-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); margin-bottom: 20px; }
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; font-weight: 500; }
-  .field input, .field select, .field textarea {
-    width: 100%; background: var(--bg);
-    border: 1px solid var(--border); color: var(--text);
-    padding: 8px 11px; border-radius: 6px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif;
-    outline: none; transition: border 0.12s;
+  .field input, .field select {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 11px; border-radius: 6px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.12s;
   }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); background: var(--bg2); }
+  .field input:focus, .field select:focus { border-color: var(--accent); background: var(--bg2); }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-  .btn-cancel {
-    background: var(--bg3); border: 1px solid var(--border);
-    color: var(--muted); padding: 8px 16px; border-radius: 6px;
-    font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
+  .btn-cancel { background: var(--bg3); border: 1px solid var(--border); color: var(--muted); padding: 8px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
   .btn-cancel:hover { color: var(--text); }
-  .btn-save {
-    background: var(--accent); color: #fff; border: none;
-    padding: 8px 20px; border-radius: 6px; font-size: 13px;
-    font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
+  .btn-save { background: var(--accent); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
   .btn-save:hover { background: var(--accent2); }
 
-  input[type=range] {
-    -webkit-appearance: none; width: 100%; height: 4px;
-    background: var(--bg3); border-radius: 2px; outline: none; border: none; padding: 0;
+  input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--bg3); border-radius: 2px; outline: none; border: none; padding: 0; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid #fff; }
+
+  /* DROP ZONE */
+  .drop-zone {
+    border: 2px dashed var(--border2); border-radius: 8px; padding: 20px;
+    text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 16px;
+    color: var(--muted); font-size: 13px;
   }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 16px; height: 16px;
-    border-radius: 50%; background: var(--accent); cursor: pointer;
-    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-  }
-  .score-display { font-size: 12px; color: var(--accent); font-weight: 500; margin-top: 4px; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: #eff6ff; color: var(--accent); }
+  .drop-zone input { display: none; }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -236,6 +172,7 @@
   <div class="header-stats">
     <div class="stat"><div class="stat-val" id="stat-total">0</div><div class="stat-label">Total</div></div>
     <div class="stat"><div class="stat-val" id="stat-today">0</div><div class="stat-label">Aujourd'hui</div></div>
+    <div class="stat"><div class="stat-val" id="stat-score">0</div><div class="stat-label">Score mois</div></div>
     <div class="stat"><div class="stat-val" id="stat-pos">0</div><div class="stat-label">Positives</div></div>
   </div>
 </header>
@@ -261,7 +198,8 @@
     <span class="search-icon">⌕</span>
     <input type="text" id="search" placeholder="Rechercher titre, source...">
   </div>
-  <button class="btn-add" onclick="openModal()">+ Ajouter</button>
+  <button class="btn btn-secondary" onclick="openImport()">↑ Importer xlsx</button>
+  <button class="btn btn-primary" onclick="openModal()">+ Ajouter</button>
 </div>
 
 <div class="table-wrap">
@@ -287,6 +225,7 @@
   </div>
 </div>
 
+<!-- MODAL AJOUT MANUEL -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-title">Ajouter une mention</div>
@@ -330,9 +269,8 @@
       </div>
     </div>
     <div class="field">
-      <label>Score de visibilité — <span id="score-val">5</span>/10</label>
-      <input type="range" id="f-score" min="1" max="10" value="5"
-             oninput="document.getElementById('score-val').textContent=this.value">
+      <label>Score (pts)</label>
+      <input type="number" id="f-score" value="50" min="0">
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Annuler</button>
@@ -340,6 +278,28 @@
     </div>
   </div>
 </div>
+
+<!-- MODAL IMPORT XLSX -->
+<div class="overlay" id="overlay-import">
+  <div class="modal">
+    <div class="modal-title">Importer un fichier xlsx</div>
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" accept=".xlsx,.xls" onchange="handleFile(this.files[0])">
+      <div style="font-size:24px;margin-bottom:8px;opacity:0.5">↑</div>
+      <div>Glisse ton fichier xlsx ici ou clique pour choisir</div>
+      <div style="font-size:11px;margin-top:4px;opacity:0.6">Format attendu : Titre, Source, Date, URL, Type, Tonalité, Score</div>
+    </div>
+    <div id="import-preview" style="display:none">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px" id="import-summary"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeImport()">Annuler</button>
+      <button class="btn-save" id="btn-confirm-import" style="display:none" onclick="confirmImport()">Importer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 const DATA_URL    = 'mentions.json';
@@ -350,7 +310,57 @@ let sortDir  = 'desc';
 let filterTone = '';
 let filterType = '';
 let searchQ    = '';
+let pendingImport = [];
 
+// ── SCORE TABLE ──
+const MEDIA_TIERS = {
+  'le monde': ['presse','big'], 'le figaro': ['presse','big'],
+  'le parisien': ['presse','big'], 'ouest france': ['presse','big'],
+  'les echos': ['presse','good'], 'la croix': ['presse','good'], 'la provence': ['presse','good'],
+  'challenges': ['presse','medium'], 'express': ['presse','medium'], 'le point': ['presse','medium'],
+  'tf1': ['tv','tf1'], 'france 2': ['tv','f2'], 'france 3': ['tv','f3'],
+  'm6': ['tv','f3'], 'bfmtv': ['tv','f3'], 'bfm': ['tv','f3'],
+  'france 5': ['tv','f5'], 'arte': ['tv','f5'], 'cnews': ['tv','f5'],
+  'lci': ['tv','nrj12'], 'france info tv': ['tv','nrj12'],
+  'france inter': ['radio','r1'], 'rtl': ['radio','r1'],
+  'france info': ['radio','r2'], 'nrj': ['radio','r2'],
+  'rmc': ['radio','r2'], 'europe 1': ['radio','r2'],
+  'france bleu': ['radio','r4'],
+};
+const SCORE_TABLE = {
+  presse: {big:[250,125], good:[200,100], medium:[150,75], other:[100,50]},
+  tv:     {tf1:[1000,500], f2:[800,400], f3:[550,275], f5:[350,175], nrj12:[200,100], other:[150,75]},
+  radio:  {r1:[400,200], r2:[300,150], r3:[200,100], r4:[100,50]},
+  social: {other:[120,36]},
+  forum:  {other:[60,18]},
+};
+const NEG_WORDS = ['hors-la-loi','arnaque','fraude','escroquerie','plainte','condamn','interdit','illegal','illégal','mauvais','critique','dénonce','alerte','méfiance','problème','scandale'];
+const POS_WORDS = ['recommande','conseille','meilleur','top','excellent','efficace','pratique','utile','avis positif','bien noté','fiable','référence','leader','pionnier'];
+
+function getMediaInfo(source) {
+  const s = source.toLowerCase();
+  for (const [key, info] of Object.entries(MEDIA_TIERS)) {
+    if (s.includes(key)) return info;
+  }
+  return ['presse', 'other'];
+}
+
+function computeScore(source, type, isDedicated = false) {
+  const [mtype, tier] = getMediaInfo(source);
+  const actualType = type || mtype;
+  const table = SCORE_TABLE[actualType] || SCORE_TABLE.presse;
+  const scores = table[tier] || table.other || [100, 50];
+  return scores[isDedicated ? 0 : 1];
+}
+
+function guessTonalite(titre) {
+  const t = titre.toLowerCase();
+  if (NEG_WORDS.some(w => t.includes(w))) return 'negatif';
+  if (POS_WORDS.some(w => t.includes(w))) return 'positif';
+  return 'neutre';
+}
+
+// ── DATA ──
 async function loadData() {
   try {
     const res    = await fetch(DATA_URL + '?t=' + Date.now());
@@ -371,14 +381,18 @@ function parseDate(str) {
   return 0;
 }
 
+function getThisMonth() {
+  const now = new Date();
+  return `${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+}
+
 function getFiltered() {
   return mentions.filter(m => {
     if (filterTone && m.tonalite !== filterTone) return false;
     if (filterType && m.type     !== filterType) return false;
     if (searchQ) {
       const q = searchQ.toLowerCase();
-      if (!String(m.titre||'').toLowerCase().includes(q) &&
-          !String(m.source||'').toLowerCase().includes(q)) return false;
+      if (!String(m.titre||'').toLowerCase().includes(q) && !String(m.source||'').toLowerCase().includes(q)) return false;
     }
     return true;
   }).sort((a, b) => {
@@ -392,11 +406,20 @@ function getFiltered() {
 }
 
 function render() {
-  const today    = new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'/');
-  const filtered = getFiltered();
+  const today    = new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
+  const thisMonth = getThisMonth();
+  const filtered  = getFiltered();
+
+  const monthMentions = mentions.filter(m => {
+    if (!m.date) return false;
+    const parts = m.date.split('/');
+    return parts.length === 3 && `${parts[1]}/${parts[2]}` === thisMonth;
+  });
+  const monthScore = monthMentions.reduce((s, m) => s + (+m.score || 0), 0);
 
   document.getElementById('stat-total').textContent = mentions.length;
   document.getElementById('stat-today').textContent = mentions.filter(m => m.date === today).length;
+  document.getElementById('stat-score').textContent = monthScore;
   document.getElementById('stat-pos').textContent   = mentions.filter(m => m.tonalite === 'positif').length;
   document.getElementById('count-label').textContent =
     `${filtered.length} mention${filtered.length !== 1 ? 's' : ''} affichée${filtered.length !== 1 ? 's' : ''}`;
@@ -429,26 +452,15 @@ function render() {
           <span class="tone-dot"></span>${esc(m.tonalite)}
         </span>
       </td>
-      <td>
-        <div class="score-cell">
-          <div class="score-bar-wrap">
-            <div class="score-bar-fill" style="width:${(m.score/10)*100}%"></div>
-          </div>
-          <span class="score-num">${m.score}</span>
-        </div>
-      </td>
+      <td><span class="score-pts">${m.score} pts</span></td>
       <td><span class="tag-${esc(m.ajout)}">${esc(m.ajout)}</span></td>
-      <td>
-        <button class="btn-delete" onclick="deleteMention('${esc(m.id)}')" title="Supprimer">×</button>
-      </td>
+      <td><button class="btn-delete" onclick="deleteMention('${esc(m.id)}')" title="Supprimer">×</button></td>
     </tr>
   `).join('');
 }
 
 function esc(s) {
-  return String(s||'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function sortBy(key) {
@@ -461,76 +473,163 @@ function sortBy(key) {
   render();
 }
 
+// ── FILTERS ──
 document.getElementById('filter-tone').addEventListener('click', e => {
   if (!e.target.matches('.filter-btn')) return;
   document.querySelectorAll('#filter-tone .filter-btn').forEach(b => b.classList.remove('active'));
-  e.target.classList.add('active');
-  filterTone = e.target.dataset.val;
-  render();
+  e.target.classList.add('active'); filterTone = e.target.dataset.val; render();
 });
-
 document.getElementById('filter-type').addEventListener('click', e => {
   if (!e.target.matches('.filter-btn')) return;
   document.querySelectorAll('#filter-type .filter-btn').forEach(b => b.classList.remove('active'));
-  e.target.classList.add('active');
-  filterType = e.target.dataset.val;
-  render();
+  e.target.classList.add('active'); filterType = e.target.dataset.val; render();
 });
+document.getElementById('search').addEventListener('input', e => { searchQ = e.target.value.trim(); render(); });
 
-document.getElementById('search').addEventListener('input', e => {
-  searchQ = e.target.value.trim();
-  render();
-});
-
+// ── MODAL AJOUT ──
 function openModal() {
   const now = new Date();
-  document.getElementById('f-date').value =
-    `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  document.getElementById('f-score').value = 5;
-  document.getElementById('score-val').textContent = '5';
+  document.getElementById('f-date').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  document.getElementById('f-score').value = 50;
   ['f-titre','f-source','f-url'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('overlay').classList.add('open');
   setTimeout(() => document.getElementById('f-titre').focus(), 50);
 }
-
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-}
-
-document.getElementById('overlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('overlay')) closeModal();
-});
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 
 function saveMention() {
   const titre   = document.getElementById('f-titre').value.trim();
   const source  = document.getElementById('f-source').value.trim();
   const dateRaw = document.getElementById('f-date').value;
-  if (!titre || !source || !dateRaw) {
-    alert('Titre, source et date sont obligatoires.');
-    return;
-  }
+  if (!titre || !source || !dateRaw) { alert('Titre, source et date sont obligatoires.'); return; }
   const [y,m,d] = dateRaw.split('-');
   const mention = {
-    id:       'manual-' + Date.now(),
-    titre,
-    source,
-    date:     `${d}/${m}/${y}`,
-    url:      document.getElementById('f-url').value.trim(),
-    type:     document.getElementById('f-type').value,
+    id: 'manual-' + Date.now(), titre, source, date: `${d}/${m}/${y}`,
+    url: document.getElementById('f-url').value.trim(),
+    type: document.getElementById('f-type').value,
     tonalite: document.getElementById('f-tonalite').value,
-    score:    parseInt(document.getElementById('f-score').value),
-    ajout:    'manuel'
+    score: parseInt(document.getElementById('f-score').value) || 50,
+    ajout: 'manuel'
   };
+  saveLocal(mention); mentions.unshift(mention); closeModal(); render();
+  toast(`Mention ajoutée — ${mention.score} pts`);
+}
+
+// ── MODAL IMPORT ──
+function openImport() {
+  pendingImport = [];
+  document.getElementById('import-preview').style.display = 'none';
+  document.getElementById('btn-confirm-import').style.display = 'none';
+  document.getElementById('file-input').value = '';
+  document.getElementById('overlay-import').classList.add('open');
+}
+function closeImport() { document.getElementById('overlay-import').classList.remove('open'); }
+
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb   = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
+      const ws   = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+      const existingUrls = new Set(mentions.map(m => m.url).filter(Boolean));
+      const existingIds  = new Set(mentions.map(m => m.id));
+      pendingImport = [];
+
+      for (const row of rows) {
+        // Détection flexible des colonnes (insensible à la casse)
+        const get = (...keys) => {
+          for (const k of keys) {
+            const found = Object.keys(row).find(rk => rk.toLowerCase().includes(k.toLowerCase()));
+            if (found && row[found] !== '') return String(row[found]).trim();
+          }
+          return '';
+        };
+
+        const titre   = get('titre','title','article','mention');
+        const source  = get('source','média','media','journal','site');
+        const url     = get('url','lien','link');
+        const typeRaw = get('type');
+        const dateRaw = get('date');
+        const toneRaw = get('tonalit','tone','sentiment');
+        const scoreRaw = get('score','points','pts');
+
+        if (!titre) continue;
+        if (url && existingUrls.has(url)) continue;
+
+        // Date
+        let dateStr = '';
+        if (dateRaw) {
+          const d = new Date(dateRaw);
+          if (!isNaN(d)) {
+            dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+          } else {
+            dateStr = dateRaw;
+          }
+        }
+        if (!dateStr) {
+          const now = new Date();
+          dateStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+        }
+
+        // Type
+        let type = 'presse';
+        const tl = typeRaw.toLowerCase();
+        if (tl.includes('radio')) type = 'radio';
+        else if (tl.includes('tv') || tl.includes('télé') || tl.includes('tele')) type = 'tv';
+        else if (tl.includes('social') || tl.includes('réseau') || tl.includes('reseau')) type = 'social';
+        else if (tl.includes('forum') || tl.includes('blog')) type = 'forum';
+
+        // Tonalité
+        let tonalite = toneRaw ? (toneRaw.toLowerCase().includes('pos') ? 'positif' : toneRaw.toLowerCase().includes('neg') ? 'negatif' : 'neutre') : guessTonalite(titre);
+
+        // Score
+        let score = scoreRaw ? (parseInt(scoreRaw) || 0) : computeScore(source, type);
+
+        const id = 'import-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+        if (!existingIds.has(id)) {
+          pendingImport.push({ id, titre, source, date: dateStr, url, type, tonalite, score, ajout: 'import' });
+          existingUrls.add(url);
+        }
+      }
+
+      document.getElementById('import-summary').textContent =
+        `${pendingImport.length} nouvelle(s) mention(s) à importer sur ${rows.length} lignes lues.`;
+      document.getElementById('import-preview').style.display = 'block';
+      document.getElementById('btn-confirm-import').style.display = pendingImport.length > 0 ? 'inline-block' : 'none';
+    } catch(err) {
+      alert('Erreur lors de la lecture du fichier : ' + err.message);
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+function confirmImport() {
+  if (!pendingImport.length) return;
+  const local = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  for (const m of pendingImport) {
+    local.unshift(m);
+    mentions.unshift(m);
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
+  closeImport();
+  render();
+  toast(`${pendingImport.length} mention(s) importée(s)`);
+  pendingImport = [];
+}
+
+// ── HELPERS ──
+function saveLocal(mention) {
   const local = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   local.unshift(mention);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
-  mentions.unshift(mention);
-  closeModal();
-  render();
 }
 
 function deleteMention(id) {
@@ -540,6 +639,18 @@ function deleteMention(id) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(local));
   render();
 }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeImport(); }
+});
+document.getElementById('overlay').addEventListener('click', e => { if (e.target === document.getElementById('overlay')) closeModal(); });
+document.getElementById('overlay-import').addEventListener('click', e => { if (e.target === document.getElementById('overlay-import')) closeImport(); });
 
 loadData();
 </script>
