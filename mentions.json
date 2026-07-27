@@ -1,5 +1,27 @@
 [
   {
+    "id": "rss-129433419853367440",
+    "titre": "Pannes, échecs de raccordement, malfaçons : les révélations du dernier Observatoire sur la fibre de l'Arcep - Selectra",
+    "source": "Selectra",
+    "date": "27/07/2026",
+    "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPMExfT013T19DVXQwR0J2Sk5YM3ZhQVBrQ1NKaEhUTmxKcnNfU2pBa0JJNDF3LV92THZDMTRFeml0UGN4ank4RG1RV1hMQ2t4TV9zOEdNdWM0WHNCWXAwOVpGNEhCVDhwbXhDaWpnU215UjNFR2lsdC1HckV4Snh1bmktTXRDWTZVZzBqVW9nT2o0TTdNa3Y3bEVTdWtPLWJhdzdLQzlGNmNBdw?oc=5",
+    "type": "presse",
+    "tonalite": "neutre",
+    "score": 50,
+    "ajout": "auto"
+  },
+  {
+    "id": "rss-5779727832890776412",
+    "titre": "Prix de l'électricité : l'électricité devient gratuite ce lundi 27 juillet, voici les heures exactes - Selectra",
+    "source": "Selectra",
+    "date": "26/07/2026",
+    "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBNMjhkeGtvZWxRUEJxUWlUbjFCWGhsOGw5bkpjUWdjajdmbXRReHBoYW1XR1VjTXM5Q3pZVDloTW9ta3ZOY0ozbEc3NDRCbENtSmtVSXVuczZkdEtFeEZQYktlRWVVRzdPemRVTFktRTFFMHhEMUlj?oc=5",
+    "type": "presse",
+    "tonalite": "neutre",
+    "score": 50,
+    "ajout": "auto"
+  },
+  {
     "id": "rss-1224752881488543089",
     "titre": "Changer d'opérateur mobile sans coupure : le RIO, ce code que peu de gens utilisent - Selectra",
     "source": "Selectra",
@@ -126,6 +148,17 @@
     "source": "Selectra",
     "date": "25/07/2026",
     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPcm1wWTlMTlRoNFRxTVVuaEk1RHBQT0QzSkZHaDcwX3BzbHhhZDRPUHc1Z1BkMGdpbEtzTjdhSXFla285a2hOUGhoUVA1SkNSY3RMZzc5djJLTEFnNnRsRGR0MHRaZVkwTl80M09mUjFwdlJNMXphcUxjYy13bDQ1QUhadjUwN3hKNkJTbmRtLVRDczVTcHdMdzdGTmhNSFJza3V4Zg?oc=5",
+    "type": "presse",
+    "tonalite": "neutre",
+    "score": 50,
+    "ajout": "auto"
+  },
+  {
+    "id": "rss-5721486227972763504",
+    "titre": "Fin du cuivre : comment garder votre numéro de téléphone fixe grâce à la portabilité vers la box - Selectra",
+    "source": "Selectra",
+    "date": "24/07/2026",
+    "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQZTZRQU1ZR3kteXpRVHpyQmNmM0dHYzhFZ2hJakJ0TjdXcGxQOExiRnlKQVcyMXVvR1lXZC1UUkIzTV9TU2F4LTFYaWtfVUtFa3RhRFdwYno1YnZaN1IzWk1jd3U4MS02QUxuT0FXS252Uk5iNUNSVHVMMF9NWUJxdU9KWllxakZhMElvbW5OS3EzTlBEZ29Gbg?oc=5",
     "type": "presse",
     "tonalite": "neutre",
     "score": 50,
@@ -5461,39 +5494,6 @@
     "source": "Selectra",
     "date": "03/07/2026",
     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPcXFhSU5SR2dfVE96RTZEenROZ1E2UlBIRjJWMnVta2hUTnlING5vazNmU2lzVDBlSW1aSHkyVk82UWxSQjd5eVBzcWtwbUNGNUtlNndiUVdhTkFVU1lJeUozUW1oSEdLaTdua1pxQ3FYWkMtRGZwZThkenZtcHlCYU9BbTFpMHJUWnFXdW5RdXB5Rmx6b0J3YkVCQmRLc1BhN214ZThBT2VXQ21oQ3gxNA?oc=5",
-    "type": "presse",
-    "tonalite": "neutre",
-    "score": 50,
-    "ajout": "auto"
-  },
-  {
-    "id": "rss-3235464744749377264",
-    "titre": "Canicule : le calendrier de la semaine la plus chaude de l'été, jusqu'à 40 °C dès ce week-end - Selectra",
-    "source": "Selectra",
-    "date": "03/07/2026",
-    "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQcFc1VjU1NlJaMUVSVFhsRU9leVBNV0UtQmZjSmFVbnFtYWQyT1h4TVBWRjhEZk5ibm9KY3RJa0lrWm5hbnJDOFZZWTF4SGptZDZIX1RtUEwxcjB4a0MzblV3YmNTcDBaQm81Y3NRanJjZTh0QXpVNF9IdjlpZ1IxWnpqQWxueFBVVGJvUlNBaF9sSEZiY01feDJEM25fUHNXLXVRZHM3Z1VjRzAta0E?oc=5",
-    "type": "presse",
-    "tonalite": "neutre",
-    "score": 50,
-    "ajout": "auto"
-  },
-  {
-    "id": "rss-7814710137617945426",
-    "titre": "Prix du gaz : le marché s'envole de 3,1 % ce vendredi 3 juillet, ce qui a fait flamber le PEG - Selectra",
-    "source": "Selectra",
-    "date": "03/07/2026",
-    "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFAxeE5uSV93N0hna3dIaXhZcWFvVkxPQXR5MTlCQzNyYm0zOVhZR00wTTEtaTM0andkUmdackpScm9oRUU5aDNvaDVCVGhFOGtfVDczMl9DM0xxNDJRXzNrUGtzQ0NQX0RPVmdRYQ?oc=5",
-    "type": "presse",
-    "tonalite": "neutre",
-    "score": 50,
-    "ajout": "auto"
-  },
-  {
-    "id": "rss-1192143462094947233",
-    "titre": "Canicule : les arnaques au climatiseur explosent (200 faux sites, 5 M€), comment les éviter - Selectra",
-    "source": "Selectra",
-    "date": "03/07/2026",
-    "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQVVlxb3p1cDhPY05zaTFUSlBzYVJWX1dia2VRbkpUaS1nOG9EV0NGNUhnN1ktM25FbDZlbGNXYm43TmU2a0lBLW5feENjNWt1NmJxV0JIRHI2QnpUcml2MklHYVRFaGp0NUFodVJtSjVWR3pJUDJqQ3JTQjd6SGRFQ0JrZ2tSaUJJRllEY3ZVdnAtOFVSQTBXdzBYNFpsZ2RRQlh3ZUwtRTJpcWNZ?oc=5",
     "type": "presse",
     "tonalite": "neutre",
     "score": 50,
